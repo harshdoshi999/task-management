@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { deleteTask, getTasks } from "../../apis.js";
 import { FaTrash } from "react-icons/fa";
 import CreateTaskModal from "./components/CreateTaskModal.js";
+import { useAuth } from "../../context/AuthContext.js";
 
 export default function TaskList() {
+  const { isAuthenticated } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [taskData, setTaskData] = useState({});
   const [search, setSearch] = useState("");
@@ -14,8 +16,13 @@ export default function TaskList() {
 
   // fetch tasks initially on component load
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    console.log(isAuthenticated)
+    if (isAuthenticated) {
+      fetchTasks();
+    } else {
+      setTasks([]);
+    }
+  }, [isAuthenticated]);
 
   // fetch tasks from API
   const fetchTasks = async () => {

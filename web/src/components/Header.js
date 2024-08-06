@@ -1,4 +1,13 @@
+import { useState } from "react";
+import LoginModal from "./LoginModal";
+import SignupModal from "./SignupModal";
+import { useAuth } from "../context/AuthContext";
+
 export default function Header() {
+  const { isAuthenticated, handleLogout } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+
   return (
     <header class="flex shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
       <div class="flex flex-wrap items-center justify-between gap-5 w-full">
@@ -29,12 +38,29 @@ export default function Header() {
         </div>
 
         <div class="flex max-lg:ml-auto space-x-3">
-          <button class="px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
-            Login
-          </button>
-          <button class="px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]">
-            Sign up
-          </button>
+          {isAuthenticated ? (
+            <button
+              onClick={() => handleLogout()}
+              class="px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={() => setIsLoginModalOpen(true)}
+                class="px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => setIsSignupModalOpen(true)}
+                class="px-4 py-2 text-sm rounded-full font-bold text-white border-2 border-[#007bff] bg-[#007bff] transition-all ease-in-out duration-300 hover:bg-transparent hover:text-[#007bff]"
+              >
+                Sign up
+              </button>
+            </>
+          )}
 
           <button id="toggleOpen" class="lg:hidden">
             <svg
@@ -52,6 +78,18 @@ export default function Header() {
           </button>
         </div>
       </div>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => {
+          setIsLoginModalOpen(false);
+        }}
+      />
+      <SignupModal
+        isOpen={isSignupModalOpen}
+        onClose={() => {
+          setIsSignupModalOpen(false);
+        }}
+      />
     </header>
   );
 }

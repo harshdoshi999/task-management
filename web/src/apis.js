@@ -1,54 +1,45 @@
 import axios from "axios";
 
-// Load environment variables
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const API_URL = process.env.REACT_APP_BASE_URL;
 
-// Add Task
-const addTask = async (task) => {
-  try {
-    const response = await axios.post(`${BASE_URL}/task/add`, task);
-    return response.data;
-  } catch (error) {
-    console.error("Error adding task:", error);
-    throw error;
-  }
+export const login = async (email, password) => {
+  const response = await axios.post(`${API_URL}/auth/login`, {
+    email,
+    password,
+  });
+  return response.data.token;
 };
 
-// Get all Tasks
-const getTasks = async () => {
-  console.log("hello");
-  try {
-    const response = await axios.get(`${BASE_URL}/tasks`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-    throw error;
-  }
+export const signup = async (email, password) => {
+  await axios.post(`${API_URL}/auth/signup`, { email, password });
 };
 
-// Update Task
-const updateTask = async (taskId, updatedTask) => {
-  try {
-    const response = await axios.put(
-      `${BASE_URL}/task/update/${taskId}`,
-      updatedTask
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error updating task:", error);
-    throw error;
-  }
+export const getTasks = async () => {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`${API_URL}/tasks`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
 };
 
-// Delete Task
-const deleteTask = async (taskId) => {
-  try {
-    const response = await axios.delete(`${BASE_URL}/task/delete/${taskId}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error deleting task:", error);
-    throw error;
-  }
+export const addTask = async (task) => {
+  console.log(task);
+  const token = localStorage.getItem("token");
+  await axios.post(`${API_URL}/task/add`, task, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 };
 
-export { addTask, getTasks, updateTask, deleteTask };
+export const deleteTask = async (id) => {
+  const token = localStorage.getItem("token");
+  await axios.delete(`${API_URL}/task/delete/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+export const updateTask = async (id, task) => {
+  const token = localStorage.getItem("token");
+  await axios.put(`${API_URL}/task/update/${id}`, task, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
