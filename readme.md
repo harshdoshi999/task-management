@@ -17,6 +17,7 @@ Step 2: cd into web and create env
 Step 3: install dependencies
 
 ```bash
+  nvm use
   npm install
 ```
 
@@ -32,5 +33,6 @@ Step 4: cd into api create env
 Step 5: install dependencies
 
 ```bash
+  nvm use
   npm install
 ```
