@@ -8,20 +8,21 @@ Step 1: Clone repo
   git clone https://github.com/harshdoshi999/task-management.git
 ```
 
-Step 2: cd into web and create env
+Step 2: From root directory, cd into web and create env
 
 ```bash
   REACT_APP_BASE_URL=http://localhost:4000
 ```
 
-Step 3: install dependencies
+Step 3: install dependencies and start server
 
 ```bash
   nvm use
   npm install
+  npm run start
 ```
 
-Step 4: cd into api create env
+Step 4: From root directory, cd into api and create env
 
 ```bash
     MONGODB_URI=mongodb+srv://<username>:<password>@tasks.nvcyffb.mongodb.net/?retryWrites=true&w=majority&appName=tasks
@@ -30,9 +31,12 @@ Step 4: cd into api create env
     JWT_SECRET="<secret token>"
 ```
 
-Step 5: install dependencies
+Step 5: install dependencies and start server
 
 ```bash
   nvm use
   npm install
+  node server.js
 ```
+
+You'll able to see the app running at http://localhost:3000/
