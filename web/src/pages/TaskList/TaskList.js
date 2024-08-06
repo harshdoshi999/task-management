@@ -16,7 +16,7 @@ export default function TaskList() {
 
   // fetch tasks initially on component load
   useEffect(() => {
-    console.log(isAuthenticated)
+    console.log(isAuthenticated);
     if (isAuthenticated) {
       fetchTasks();
     } else {
@@ -64,6 +64,10 @@ export default function TaskList() {
     const matchesStatus = statusFilter ? task.status === statusFilter : true;
     return matchesSearch && matchesStatus;
   });
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div class="max-w-4xl mx-auto mt-10">
