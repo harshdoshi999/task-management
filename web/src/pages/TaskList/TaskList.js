@@ -1,54 +1,55 @@
 import { useEffect, useState } from "react";
-import { getTasks } from "../../apis.js";
+import { deleteTask, getTasks } from "../../apis.js";
+import { FaTrash } from "react-icons/fa";
 import CreateTaskModal from "./components/CreateTaskModal.js";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [taskData, setTaskData] = useState({});
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
 
+  // fetch tasks initially on component load
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const data = await getTasks();
-        console.log("data:", data);
-        setTasks(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTasks();
   }, []);
 
+  // fetch tasks from API
+  const fetchTasks = async () => {
+    try {
+      const data = await getTasks();
+      setTasks(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // handle delete click
+  const handleDelete = async (id) => {
+    try {
+      await deleteTask(id);
+      setTasks(tasks.filter((task) => task._id !== id));
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
+  // open and close modal logic below
   const openModal = () => {
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setTaskData({});
-    // Optionally, you can re-fetch the tasks here to show the new task
-    const fetchTasks = async () => {
-      try {
-        const data = await getTasks();
-        setTasks(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTasks();
   };
 
+  // filter master data based on the search and status dropdown values
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = search
       ? task.name.toLowerCase().includes(search.toLowerCase())
@@ -98,21 +99,29 @@ export default function TaskList() {
           </div>
         </div>
       </div>
-      <div class="flex">
+      <div class="flex gap-2">
         {filteredTasks.length === 0 && <p>No tasks</p>}
         {filteredTasks.map(({ _id, name, description, status }, index) => {
           return (
             <div key={index} class="max-w-sm mt-10">
               <div class="bg-white shadow-lg rounded-lg p-6">
-                <h2
-                  onClick={() => {
-                    setTaskData({ _id, name, description, status });
-                    openModal();
-                  }}
-                  class="text-2xl font-bold mb-2"
-                >
-                  {name}
-                </h2>
+                <div className="flex justify-between items-center">
+                  <h2
+                    onClick={() => {
+                      setTaskData({ _id, name, description, status });
+                      openModal();
+                    }}
+                    className="text-2xl font-bold mb-2 cursor-pointer"
+                  >
+                    {name}
+                  </h2>
+                  <button
+                    onClick={() => handleDelete(_id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <FaTrash size={20} />
+                  </button>
+                </div>
                 <p class="text-gray-700 mb-4">{description}</p>
                 <div class="flex items-center">
                   <span class="text-sm font-medium text-gray-600">Status:</span>
