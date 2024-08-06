@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { getToken } from "../apis"; // Assuming you have a method to get the token
 
 const AuthContext = createContext();
 
@@ -10,7 +9,6 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       const token = localStorage.getItem("token");
       if (token) {
-        // Verify token validity (if needed) or simply set as authenticated
         setIsAuthenticated(true);
       }
     };

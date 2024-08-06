@@ -10,8 +10,6 @@ export default function TaskList() {
   const [taskData, setTaskData] = useState({});
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // fetch tasks initially on component load
@@ -30,9 +28,7 @@ export default function TaskList() {
       const data = await getTasks();
       setTasks(data);
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      console.log(err.message);
     }
   };
 
