@@ -40,3 +40,10 @@ Step 5: install dependencies and start server
 ```
 
 You'll able to see the app running at http://localhost:3000/
+
+## Tech Stack (MERN Stack)
+
+Frontend - ReactJS
+Backend - NodeJS (ExpressJS)
+Database - MongoDB
+CSS - Tailwind CSS
